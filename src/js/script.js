@@ -35,8 +35,8 @@
 
   const classNames = {
     menuProduct: {
-      wrapperActive: 'active',
-      imageVisible: 'active',
+      wrapperActive: '.active',
+      imageVisible: '.active',
     },
   };
 
@@ -52,7 +52,77 @@
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
   };
 
+  class Product{
+    constructor(id, data){
+      const thisProduct = this;
+      thisProduct.id = id;
+      thisProduct.data = data;
+
+      thisProduct.renderInMenu();
+      thisProduct.initAccordion();
+
+      console.log('new Product: ', thisProduct);
+    }
+
+    renderInMenu(){
+      const thisProduct = this;
+
+      /*generate text based on template (but not understood as HTML code)*/
+      const generatedHTML = templates.menuProduct(thisProduct.data);
+
+      /*create element understood as HTML using utils.createElementFromHTML*/
+      thisProduct.element = utils.createDOMFromHTML(generatedHTML);
+
+      /*find menu container*/
+      const menuContainer = document.querySelector(select.containerOf.menu);
+
+      /*add element to menu at this point only the created template gets active*/
+      menuContainer.appendChild(thisProduct.element);
+    }
+
+    initAccordion(){
+      const thisProduct = this;
+
+      /*find the clickable trigger (element that should react to click)*/
+      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+
+      /*START: add event listener to clickable element on event click*/
+      clickableTrigger.addEventListener('click', function(event) {
+        /*prevent from default action on event*/
+        event.preventDefault();
+
+        /*find active products (that have active class)*/
+        const activeProducts = document.querySelectorAll('article' + classNames.menuProduct.wrapperActive);
+
+        /*if there's an active product and it's not thisProduct.element, removeclass active from it*/
+        for (let product of activeProducts){
+          const productClass = product.getAttribute('class');
+          if (productClass.indexOf('active') > -1 && product !== thisProduct.element) {
+            product.classList.remove('active');
+          }
+        }
+        /*toggle active class on thisProduct.element*/
+        thisProduct.element.classList.toggle('active');
+      });
+    }
+  }
+
   const app = {
+    initMenu: function(){
+      const thisApp = this;
+      console.log('thisApp.data: ', thisApp.data);
+
+      for (let productData in thisApp.data.products){
+        new Product (productData, thisApp.data.products[productData]);
+      }
+    },
+
+    initData: function(){
+      const thisApp = this;
+
+      thisApp.data = dataSource;
+    },
+
     init: function(){
       const thisApp = this;
       console.log('*** App starting ***');
@@ -60,6 +130,9 @@
       console.log('classNames:', classNames);
       console.log('settings:', settings);
       console.log('templates:', templates);
+
+      thisApp.initData();
+      thisApp.initMenu();
     },
   };
 
