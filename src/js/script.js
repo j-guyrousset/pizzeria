@@ -136,11 +136,8 @@
 
     processOrder(){
       const thisProduct = this;
-      console.log('function ProcessOrder called on:', thisProduct.id);
       const formData = utils.serializeFormToObject(thisProduct.form);  // we know what has been chosen on the form
-      console.log('form data: ', formData);
-      console.log('the options choosed in the form are:');
-
+      console.log('function ProcessOrder called on:', thisProduct.id);
 
       //set price to default defaultValue
       let price = thisProduct.data.price;
@@ -151,73 +148,46 @@
         console.log('parameter ID: ', paramId);
         console.log('parameter: ', param);  //the table which name is paramId
 
-
         let elementHTML = '';
         if (param.type !== 'select'){
           for(let optionId in param.options){
             const option = param.options[optionId];
-            console.log('option ID: ', optionId);
-            console.log('option: ', option);  //the table which name is optionId
-            console.log('price of the option: ', option.price);
-            //const optionPrice = option.price;
-
+            console.log('option ID: ', optionId + ': ' + option.price);
+            //console.log('option: ', option);  //the table which name is optionId
             elementHTML = document.getElementById(optionId);
-            console.log('elmt HTML: ', elementHTML);
 
             if(option.default && elementHTML.checked){
-              console.log('default and checked');
               price += 0;
             }
             if(option.default && !(elementHTML.checked)){
-              console.log('default and NOT checked');
               price -= option.price;
             }
             if(!option.default && elementHTML.checked){
-              console.log('NOT default and checked');
               price += option.price;
             }
           }
+          console.log('updated price: ', price);
         } else {
           const elem = document.querySelector('select');
-          console.log('select element: ', elem);
           const elementHTMLs = elem.querySelectorAll('option');
           for (let optionElement of elementHTMLs){
             elementHTML = optionElement;
-            console.log('other elmt HTML: ', optionElement);
             const optionPrice = param.options[elementHTML.value].price;
-            console.log('option price for the element: ', optionPrice);
 
             if(elementHTML.value == 'standard' && (elementHTML.selected)){
-              console.log('default: ', elementHTML.value == 'standard');
-              console.log('selected: ', elementHTML.selected);
-              console.log('price =  ' + price + '+' + 0);
               price += 0;
-              console.log('updated price: ', price);
             } else if(elementHTML.value == 'standard' && !(elementHTML.selected)){
-              console.log('default: ', elementHTML.value == 'standard');
-              console.log('selected: ', elementHTML.selected);
-              console.log('price =  ' + price + '+' - optionPrice);
               price -= optionPrice;
-              console.log('updated price: ', price);
             } else if(!(elementHTML.value == 'standard') && elementHTML.selected){
-              console.log('default: ', elementHTML.value == 'standard');
-              console.log('selected: ', elementHTML.selected);
-              console.log('price =  ' + price + '+' + optionPrice);
               price += optionPrice;
-              console.log('updated price: ', price);
-            } else {
-              console.log('default: ', elementHTML.value == 'standard');
-              console.log('selected: ', elementHTML.selected);
-              console.log('price =  ' + price + '+' + 0);
-              price += 0;
-              console.log('updated price: ', price);
             }
           }
+          console.log('updated price: ', price);
         }
       }
 
       price = price*formData.amount;
-      console.log('price ', price);
+      console.log('Total price ', price);
 
     }
   }
