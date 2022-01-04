@@ -86,7 +86,8 @@
       thisProduct.formInputs = thisProduct.element.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      thisProduct.active = thisProduct.element.querySelector(select.all.menuProductsActive);
+      thisProduct.active = thisProduct.element.querySelectorAll(select.all.menuProductsActive);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion(){
@@ -137,6 +138,7 @@
     processOrder(){
       const thisProduct = this;
       const formData = utils.serializeFormToObject(thisProduct.form);  // we know what has been chosen on the form
+      console.log('The form data looks like: ', formData);
       console.log('function ProcessOrder called on:', thisProduct.id);
 
       //set price to default defaultValue
@@ -152,9 +154,20 @@
         if (param.type !== 'select'){
           for(let optionId in param.options){
             const option = param.options[optionId];
+            const imageClass = paramId + '-' + optionId;
+            const imageHTML = thisProduct.imageWrapper.getElementsByClassName(imageClass);
+            console.log('imageHTML: ', imageHTML);
+            console.log('corresponding image class: ', imageClass);
             console.log('option ID: ', optionId + ': ' + option.price);
             //console.log('option: ', option);  //the table which name is optionId
             elementHTML = document.getElementById(optionId);
+            const visibleImage = classNames.menuProduct.imageVisible;
+
+            if(elementHTML.checked && imageHTML[0]){
+              imageHTML[0].classList.add(visibleImage);
+            } else if(!elementHTML.checked && imageHTML[0]){
+              imageHTML[0].classList.remove(visibleImage);
+            }
 
             if(option.default && elementHTML.checked){
               price += 0;
