@@ -138,21 +138,61 @@
     processOrder(){
       const thisProduct = this;
       const formData = utils.serializeFormToObject(thisProduct.form);  // we know what has been chosen on the form
-      console.log('The form data looks like: ', formData);
+      console.log('The selected data are the following: ', formData);
       console.log('function ProcessOrder called on:', thisProduct.id);
 
       //set price to default defaultValue
       let price = thisProduct.data.price;
       console.log('default price: ', price);
 
-      for(let paramId in thisProduct.data.params){
+      for(let paramId in thisProduct.data.params){ //iteration through all the parameters
         const param = thisProduct.data.params[paramId];
-        console.log('parameter ID: ', paramId);
+        //console.log('parameter ID: ', paramId);
         console.log('parameter: ', param);  //the table which name is paramId
 
+        for (let optionId in param.options){
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+          const imageClass = paramId + '-' + optionId;
+          const imageElement = thisProduct.element.querySelector('.' + imageClass);
+          const visibleImage = classNames.menuProduct.imageVisible;
+
+          if (optionSelected){
+            console.log(optionId + ' of ' + thisProduct.id + ' ' + paramId +  ' is selected');
+            if(option.default){
+              console.log(optionId + ' is a default option -> not adding anything');
+              price += 0;
+            } else {
+              console.log(optionId + ' is not a default option -> adding: ' + option.price);
+              price += option.price;
+            }
+          } else if (!optionSelected){
+            console.log(optionId + ' of ' + thisProduct.id + ' ' + paramId +  ' is not selected');
+            if (option.default) {
+              console.log('But ' + optionId + ' is a default option -> taking: ' + option.price);
+              price -= option.price;
+            } else {
+              console.log(optionId + ' is not a default option, so it is cool -> not changing anything');
+              price += 0;
+            }
+          }
+
+          if (imageElement){
+            console.log(optionId + ' has an image associated');
+            if (optionSelected){
+              console.log('switch on this image display');
+              imageElement.classList.add(visibleImage);
+            } else{
+              console.log('switch off this image display');
+              imageElement.classList.remove(visibleImage);
+            }
+          }
+
+        }
+        /*
         let elementHTML = '';
         if (param.type !== 'select'){
-          for(let optionId in param.options){
+          for(let optionId in param.options){ //iteration through all the options of a given parameter
             const option = param.options[optionId];
             const imageClass = paramId + '-' + optionId;
             const imageHTML = thisProduct.imageWrapper.getElementsByClassName(imageClass);
@@ -197,6 +237,7 @@
           }
           console.log('updated price: ', price);
         }
+        */
       }
 
       price = price*formData.amount;
@@ -211,8 +252,8 @@
       console.log('thisApp.data: ', thisApp.data);
       for (let productData in thisApp.data.products){
         new Product (productData, thisApp.data.products[productData]);
-        console.log('And the productData is... : ', productData);
-        console.log('which contains : ', thisApp.data.products[productData].description);
+        //console.log('And the productData is... : ', productData);
+      //  console.log('which contains : ', thisApp.data.products[productData].description);
       }
     },
 
