@@ -9,10 +9,6 @@ class Cart{
     thisCart.products = [];
     thisCart.getElements(element);
     thisCart.initActions();
-    //console.log('new Cart: ', thisCart);
-    //console.log('Cart wrapper: ', thisCart.dom.wrapper);
-    //console.log('Cart toggle trigger: ', thisCart.dom.toggleTrigger);
-
   }
 
   getElements(element){
@@ -68,8 +64,6 @@ class Cart{
     thisCart.dom.productList.appendChild(generatedDOM);
     thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
 
-    //console.log('adding product: ', menuProduct);
-    //console.log('products of this cart: ', thisCart.products);
     thisCart.update();
   }
 

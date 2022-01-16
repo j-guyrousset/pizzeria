@@ -4,8 +4,6 @@ class AmountWidget{
   constructor(element){
     const thisWidget = this;
 
-    //console.log('AmountWidget: ', thisWidget);
-    //console.log('constructor argument: ', element);
     thisWidget.value = settings.amountWidget.defaultValue;
     thisWidget.getElements(element);
     thisWidget.setValue(thisWidget.input.value);
@@ -26,19 +24,12 @@ class AmountWidget{
     const newValue = parseInt(value);
     const minVal = settings.amountWidget.defaultMin;
     const maxVal = settings.amountWidget.defaultMax;
-    //console.log('new value: ', value);
-    //console.log('value is a number: ', !isNaN(newValue));
-
 
     if(newValue !== thisWidget.value && !isNaN(newValue)){
       if(newValue <= maxVal && newValue >= minVal){
         thisWidget.value = newValue;
         thisWidget.annoounce();
-      } else {
-        console.log(newValue + ': this number is out of range');
-      }
-    } else {
-      console.log(value + ': this is not a number');
+      } 
     }
 
     thisWidget.input.value = thisWidget.value;

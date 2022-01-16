@@ -14,8 +14,6 @@ class Product{
     thisProduct.initOrderForm();
     thisProduct.initAmountWidget();
     thisProduct.processOrder();
-
-    //console.log('new Product: ', thisProduct);
   }
 
   renderInMenu(){
@@ -66,7 +64,7 @@ class Product{
 
   initOrderForm(){
     const thisProduct = this;
-    //console.log('function initOrderForm called', thisProduct.dom.formInputs);
+
     thisProduct.dom.form.addEventListener('submit', function(event){
       event.preventDefault();
       thisProduct.processOrder();
@@ -91,16 +89,13 @@ class Product{
   processOrder(){
     const thisProduct = this;
     const formData = utils.serializeFormToObject(thisProduct.dom.form);  // we know what has been chosen on the form
-    //console.log('The selected data are the following: ', formData);
-    //console.log('function ProcessOrder called on:', thisProduct.id);
+
 
     //set price to default defaultValue
     let price = thisProduct.data.price;
 
     for(let paramId in thisProduct.data.params){ //iteration through all the parameters
-      const param = thisProduct.data.params[paramId];
-      //console.log('parameter ID: ', paramId);
-      //console.log('parameter: ', param);  //the table which name is paramId
+      const param = thisProduct.data.params[paramId];  //the table which name is paramId
 
       for (let optionId in param.options){
         const option = param.options[optionId];
@@ -110,32 +105,21 @@ class Product{
         const visibleImage = classNames.menuProduct.imageVisible;
 
         if (optionSelected){
-          //console.log(optionId + ' of ' + thisProduct.id + ' ' + paramId +  ' is selected');
           if(option.default){
-            //console.log(optionId + ' is a default option -> not adding anything');
             price += 0;
           } else {
-            //console.log(optionId + ' is not a default option -> adding: ' + option.price);
             price += option.price;
           }
         } else if (!optionSelected){
-          //console.log(optionId + ' of ' + thisProduct.id + ' ' + paramId +  ' is not selected');
           if (option.default) {
-            //console.log('But ' + optionId + ' is a default option -> taking: ' + option.price);
             price -= option.price;
-          } else {
-            //console.log(optionId + ' is not a default option, so it is cool -> not changing anything');
-            price += 0;
           }
         }
 
         if (imageElement){
-          //console.log(optionId + ' has an image associated');
           if (optionSelected){
-            //console.log('switch on this image display');
             imageElement.classList.add(visibleImage);
           } else{
-            //console.log('switch off this image display');
             imageElement.classList.remove(visibleImage);
           }
         }
@@ -144,13 +128,9 @@ class Product{
     }
 
     //price = price*formData.amount;
-    //console.log('Total price ', price);
     thisProduct.priceSingle = price;
     price *= thisProduct.amountWidget.value;
     thisProduct.dom.priceElem.innerHTML = price;
-    //console.log('amount: ' + thisProduct.amountWidget.value + ' - updated price: ' + price);
-    //console.log('default price :', thisProduct.data.price);
-    //console.log('price per single product :', thisProduct.priceSingle);
   }
 
   initAmountWidget(){
@@ -186,7 +166,6 @@ class Product{
     productSummary.priceSingle = thisProduct.priceSingle;
     productSummary.price = productSummary.priceSingle * productSummary.amount;
     productSummary.params = thisProduct.prepareCartProductParams();
-    //console.log('product summary: ', productSummary);
 
     return productSummary;
   }
@@ -213,7 +192,6 @@ class Product{
         }
       }
     }
-    //console.log('product cart params: ', cartProductParams);
     return cartProductParams;
   }
 

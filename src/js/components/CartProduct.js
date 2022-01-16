@@ -14,7 +14,6 @@ class CartProduct{
     thisCartProduct.getElements(element);
     thisCartProduct.initAmountWidget();
     thisCartProduct.initActions();
-    //console.log('cart product (instance of its class) created: ', thisCartProduct);
   }
 
   getElements(element){
@@ -63,7 +62,6 @@ class CartProduct{
     thisCartProduct.dom.remove.addEventListener('click', function(event){
       event.preventDefault();
       thisCartProduct.remove();
-      //console.log('thiscart has been removed: ', thisCartProduct);
     });
   }
 
