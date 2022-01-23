@@ -277,8 +277,10 @@ class Booking{
         console.log('booking parsedResponse', parsedResponse);
       });
 
-    alert('booking sent: ' + payload);
+    thisBooking.makeOrder(payload.date, payload.hour, payload.duration, payload.table);
     thisBooking.updateDOM();
+    thisBooking.resetParams();
+
   }
 
   prepareStarters(){
@@ -291,6 +293,24 @@ class Booking{
       }
     }
     return thisBooking.starters;
+  }
+
+  resetParams(){
+    const thisBooking = this;
+
+    thisBooking.dom.address.value = thisBooking.dom.address.placeholder;
+    thisBooking.dom.phone.value = thisBooking.dom.phone.placeholder;
+    thisBooking.dom.peopleAmount.querySelector('input').value = 1;
+    thisBooking.dom.hoursAmount.querySelector('input').value = 1;
+    //thisBooking.hourPicker.value = settings.hour.open;
+
+    for (let starter of thisBooking.dom.starters){
+      if (starter.checked){
+        starter.checked = false;
+      }
+    }
+
+
   }
 }
 
