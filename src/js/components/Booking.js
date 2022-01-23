@@ -8,6 +8,7 @@ class Booking{
   constructor(element){
     const thisBooking = this;
 
+    thisBooking.tableSelected;
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
@@ -147,12 +148,15 @@ class Booking{
         &&
         thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)
       ){
+        if (table.classList.contains(classNames.booking.tableSelected)){
+          table.classList.remove(classNames.booking.tableSelected);
+        }
         table.classList.add(classNames.booking.tableBooked);
+
       } else {
         table.classList.remove(classNames.booking.tableBooked);
       }
     }
-
   }
 
   render(element){
@@ -169,6 +173,32 @@ class Booking{
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
+    thisBooking.dom.plan = thisBooking.dom.wrapper.querySelector(select.booking.plan);
+  }
+
+  initTables(tableId){
+    const thisBooking = this;
+
+    for (let table of thisBooking.dom.tables){
+      thisBooking.tableId = table.getAttribute(settings.booking.tableIdAttribute);
+
+      if (table.classList.contains(classNames.booking.tableSelected) || table.classList.contains(classNames.booking.tableBooked)){
+        table.classList.remove(classNames.booking.tableSelected);
+      } else {
+        table.classList.toggle(classNames.booking.tableSelected, tableId == thisBooking.tableId);
+      }
+    }
+
+    for (let table of thisBooking.dom.tables){
+      if (table.classList.contains(classNames.booking.tableSelected)){
+        thisBooking.tableSelected = table.getAttribute(settings.booking.tableIdAttribute);
+        break;
+      } else {
+        thisBooking.tableSelected ='';
+      }
+    }
+    console.log('thisBooking.tableSelected: ', thisBooking.tableSelected);
+
   }
 
   initWidgets(){
@@ -184,8 +214,24 @@ class Booking{
       thisBooking.updateDOM();
     });
 
+    thisBooking.dom.plan.addEventListener('click', function(event){
+      event.preventDefault();
+      const clickedElem = event.target;
+      const clickedElemId = clickedElem.getAttribute(settings.booking.tableIdAttribute);
+
+      if (clickedElem.classList.contains(classNames.booking.table)){
+        thisBooking.initTables(clickedElemId);
+      }
+
+      if (clickedElem.classList.contains(classNames.booking.tableBooked)){
+        alert('This table is already booked.');
+      }
+
+    });
+
 
   }
+
 }
 
 
