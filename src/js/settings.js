@@ -40,10 +40,14 @@ export const select = {
     },
   },
   booking: {
+    formSubmit: '.order-confirmation [type="submit"]',
+    phone: '.order-confirmation input[name="phone"]',
+    address: '.order-confirmation input[name="address"]',
     peopleAmount: '.people-amount',
     hoursAmount: '.hours-amount',
     plan: '.floor-plan',
     tables: '.floor-plan .table',
+    starters: '.booking-options input[name="starter"]'
   },
   nav: {
     links: '.main-nav a',
