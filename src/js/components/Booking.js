@@ -8,7 +8,7 @@ class Booking{
   constructor(element){
     const thisBooking = this;
 
-    thisBooking.tableSelected;
+    thisBooking.tableSelected = null;
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
@@ -157,6 +157,16 @@ class Booking{
         table.classList.remove(classNames.booking.tableBooked);
       }
     }
+
+    for (let table of thisBooking.dom.tables){
+      if (table.classList.contains(classNames.booking.tableSelected)){
+        thisBooking.tableSelected = table.getAttribute(settings.booking.tableIdAttribute);
+        break;
+      } else {
+        thisBooking.tableSelected =null;
+      }
+    }
+    console.log('thisBooking.tableSelected: ', thisBooking.tableSelected);
   }
 
   render(element){
@@ -194,7 +204,7 @@ class Booking{
         thisBooking.tableSelected = table.getAttribute(settings.booking.tableIdAttribute);
         break;
       } else {
-        thisBooking.tableSelected ='';
+        thisBooking.tableSelected =null;
       }
     }
     console.log('thisBooking.tableSelected: ', thisBooking.tableSelected);
@@ -212,6 +222,7 @@ class Booking{
 
     thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
+      console.log('thisBooking.tableSelected: ', thisBooking.tableSelected);
     });
 
     thisBooking.dom.plan.addEventListener('click', function(event){
